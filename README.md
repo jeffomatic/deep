@@ -1,7 +1,10 @@
-
 # deep
 
 This library contains utilities for manipulating deeply-nested data structures. These functions only perform recursive traversal of arrays and "plain" objects, that is, those objects that were created using object literals (`{}`) or `new Object`.
+
+## Installation
+
+    npm install deep
 
 ## Function reference
 
