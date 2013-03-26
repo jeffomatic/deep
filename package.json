@@ -1,0 +1,29 @@
+{
+  "name": "deep",
+  "version": "0.0.1",
+  "description": "Utilities for manipulating nested data structures",
+  "keywords": [ "nested", "deep", "clone", "extend", "recursive", "plain object" ],
+  "author": "Jeff Lee <jeffomatic@gmail.com>",
+  "repository": {
+    "type" : "git",
+    "url" : "http://github.com/jeffomatic/deep.git"
+  },
+  "bugs": {
+    "url" : "http://github.com/jeffomatic/deep/issues"
+  },
+  "licenses": [
+    {
+      "type" : "MIT",
+      "url" : "http://github.com/jeffomatic/deep/raw/master/LICENSE"
+    }
+  ],
+  "main": "./js/lib/deep",
+  "dependencies": {
+    "underscore": "~1.4.4"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.6.2",
+    "mocha": "~1.8.2",
+    "should": "~1.2.2"
+  }
+}
