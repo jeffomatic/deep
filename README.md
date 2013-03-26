@@ -3,12 +3,6 @@
 
 This library contains utilities for manipulating deeply-nested data structures. These functions only perform recursive traversal of arrays and "plain" objects, that is, those objects that were created using object literals (`{}`) or `new Object`.
 
-## Contributing
-
-This module is written in Coffeescript, but distributed in JavaScript. To
-contribute, please modify the Coffeescript source and run `make js` to generate
-JavaScript files.
-
 ## Function reference
 
 ### isPlainObject(object)
