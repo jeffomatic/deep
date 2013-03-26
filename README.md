@@ -106,4 +106,4 @@ deep.transform(
 //    }
 ```
 
-Returns a deep copy of `object`, using the `transform` function to modify any elements that satisfy the `filter function.
+Returns a deep copy of `object`, using the `transform` function to modify any elements that satisfy the `filter` function.
