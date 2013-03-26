@@ -52,7 +52,7 @@ Recursively merges each `source` object into `destination`, preserving any neste
 
 ----
 
-### select(root, filter, path = [])
+### select(root, filter)
 
 ```js
 x = {
