@@ -1,5 +1,5 @@
 _ = require('underscore')
-should = require('should')
+assert = require('assert')
 testHelper = require('./test_helper')
 deep = require('../lib/deep')
 
@@ -8,32 +8,32 @@ describe 'deep module', () ->
   describe 'isPlainObject()', () ->
 
     it 'object literals are plain objects', (done) ->
-      deep.isPlainObject({}).should.eql true
+      assert deep.isPlainObject({})
       done()
 
     it 'objects created with `new Object` are plain objects', (done) ->
-      deep.isPlainObject(new Object).should.eql true
+      assert deep.isPlainObject(new Object)
       done()
 
     it 'global is a plain object', (done) ->
-      deep.isPlainObject(global).should.eql true
+      assert deep.isPlainObject(global)
       done()
 
     it 'arrays are not plain objects', (done) ->
-      deep.isPlainObject([]).should.eql false
+      assert !deep.isPlainObject([])
       done()
 
     it 'functions are not plain objects', (done) ->
-      deep.isPlainObject(() ->).should.eql false
+      assert !deep.isPlainObject(() ->)
       done()
 
     it 'Buffers are not plain objects', (done) ->
-      deep.isPlainObject(new Buffer(1)).should.eql false
+      assert !deep.isPlainObject(new Buffer(1))
       done()
 
     it 'Custom objects are not plain objects', (done) ->
       Foobar = () ->
-      deep.isPlainObject(new Foobar).should.eql false
+      assert !deep.isPlainObject(new Foobar)
       done()
 
   describe 'clone()', () ->
@@ -65,25 +65,25 @@ describe 'deep module', () ->
 
     it 'should generate new plain objects and arrays', (done) ->
       @clone.obj.a[0].b.c.push 0
-      @clone.obj.a[0].b.c.length.should.not.eql @original.obj.a[0].b.c.length
+      assert.notEqual @clone.obj.a[0].b.c.length, @original.obj.a[0].b.c.length
 
       @clone.arr[4].bar = 'foo'
-      (@original.arr[4].bar?).should.eql false
+      assert !@original.arr[4].bar?
 
       done()
 
     it 'should preserve references to functions', (done) ->
-      @clone.arr[0].should.eql @original.arr[0]
+      assert.equal @clone.arr[0], @original.arr[0]
       done()
 
     it 'should preserve references to Buffers', (done) ->
-      @clone.arr[3].constructor.name.should.eql 'Buffer'
-      @clone.arr[3].should.eql @original.arr[3]
+      assert.equal @clone.arr[3].constructor.name, 'Buffer'
+      assert.equal @clone.arr[3], @original.arr[3]
       done()
 
     it 'should preserve references to custom objects', (done) ->
-      @clone.arr[4].foobar.constructor.name.should.eql 'Foobar'
-      @clone.arr[4].foobar.should.eql @original.arr[4].foobar
+      assert.equal @clone.arr[4].foobar.constructor.name, 'Foobar'
+      assert.equal @clone.arr[4].foobar, @original.arr[4].foobar
       done()
 
   describe 'extend()', () ->
@@ -93,7 +93,7 @@ describe 'deep module', () ->
       b = b: 2
       c = c: 3
       deep.extend a, b, c
-      a.should.eql a: 1, b: 2, c: 3
+      assert.deepEqual a, a: 1, b: 2, c: 3
       done()
 
     it 'should prioritize latter arguments', (done) ->
@@ -101,7 +101,7 @@ describe 'deep module', () ->
       b = a: 2
       c = a: 3
       deep.extend a, b, c
-      a.should.eql a: 3
+      assert.deepEqual a, a: 3
       done()
 
     it 'should extend recursively', (done) ->
@@ -109,19 +109,22 @@ describe 'deep module', () ->
         alpha:
           beta:
             charlie: 1
+
       b =
         alpha:
           beta:
             delta: 3
         epsilon: 2
+
       deep.extend a, b
-      a.should.eql(
+
+      assert.deepEqual a,
         alpha:
           beta:
             charlie: 1
             delta: 3
         epsilon: 2
-      )
+
       done()
 
     it 'should create copies of nested objects', (done) ->
@@ -135,7 +138,7 @@ describe 'deep module', () ->
             delta: [1, 2, 3, 4]
       deep.extend a, b
       b.alpha.beta.delta.push(5)
-      a.alpha.beta.delta.length.should.eql b.alpha.beta.delta.length - 1
+      assert.equal a.alpha.beta.delta.length, b.alpha.beta.delta.length - 1
       done()
 
   describe 'select()', () ->
@@ -165,18 +168,18 @@ describe 'deep module', () ->
       done()
 
     it "should find all objects that satisfy the filter", (done) ->
-      @selected.length.should.eql 4
-      @selected[0].value.should.eql @container.arr[0]
-      @selected[1].value.should.eql @container.arr[3]
-      @selected[2].value.should.eql @container.arr[4].foobar
-      @selected[3].value.should.eql @container.obj.a[0].b.c
+      assert.equal @selected.length, 4
+      assert.deepEqual @selected[0].value, @container.arr[0]
+      assert.deepEqual @selected[1].value, @container.arr[3]
+      assert.deepEqual @selected[2].value, @container.arr[4].foobar
+      assert.deepEqual @selected[3].value, @container.obj.a[0].b.c
       done()
 
     it "should report paths to objects that satisfy the filter", (done) ->
-      @selected[0].path.should.eql [ 'arr', '0' ]
-      @selected[1].path.should.eql [ 'arr', '3' ]
-      @selected[2].path.should.eql [ 'arr', '4', 'foobar' ]
-      @selected[3].path.should.eql [ 'obj', 'a', '0', 'b', 'c' ]
+      assert.deepEqual @selected[0].path, [ 'arr', '0' ]
+      assert.deepEqual @selected[1].path, [ 'arr', '3' ]
+      assert.deepEqual @selected[2].path, [ 'arr', '4', 'foobar' ]
+      assert.deepEqual @selected[3].path, [ 'obj', 'a', '0', 'b', 'c' ]
       done()
 
   describe "set()", () ->
@@ -188,12 +191,12 @@ describe 'deep module', () ->
 
     it 'should set values using paths', (done) ->
       deep.set @obj, [ 'arr', '0' ], 'new value'
-      @obj.arr[0].should.eql 'new value'
+      assert.equal @obj.arr[0], 'new value'
       done()
 
     it 'should set values with path lenghts of 1', (done) ->
       deep.set @obj, [ 'new' ], 'new value'
-      @obj.new.should.eql 'new value'
+      assert.equal @obj.new, 'new value'
       done()
 
   describe "transform()", () ->
@@ -225,13 +228,13 @@ describe 'deep module', () ->
       done()
 
     it 'should apply transform to values that satisfy the filter', (done) ->
-      @transformed.arr[2].should.eql 2
-      @transformed.arr[4].bar.should.eql 4
-      @transformed.obj.a[1].should.eql 6
+      assert.equal @transformed.arr[2], 2
+      assert.equal @transformed.arr[4].bar, 4
+      assert.equal @transformed.obj.a[1], 6
       done()
 
     it 'should not affect values that do not satisfy the filter', (done) ->
-      @transformed.arr[0].should.eql @original.arr[0]
-      @transformed.arr[1].should.eql @original.arr[1]
-      @transformed.obj.z.should.eql @original.obj.z
+      assert.equal @transformed.arr[0], @original.arr[0]
+      assert.equal @transformed.arr[1], @original.arr[1]
+      assert.equal @transformed.obj.z, @original.obj.z
       done()
