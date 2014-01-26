@@ -1,6 +1,6 @@
 {
   "name": "deep",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Utilities for manipulating nested data structures",
   "keywords": [ "nested", "deep", "clone", "extend", "recursive", "plain object" ],
   "author": "Jeff Lee <jeffomatic@gmail.com>",

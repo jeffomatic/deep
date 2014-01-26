@@ -36,6 +36,49 @@ This will preserve references to all non-array, non-plain objects, including fun
 
 ----
 
+### equals(a, b)
+
+```js
+a = b = [1, 2, 3]
+deep.equals(a, b) // true
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+deep.equals(a, b) // true
+
+a = [1, 2, 3]
+b = [1, 2, 4]
+deep.equals(a, b) // false
+
+a = b = {x: 1, y: 2}
+deep.equals(a, b) // true
+
+a = {x: 1, y: 2}
+b = {x: 1, y: 2}
+deep.equals(a, b) // true
+
+a = b = new Buffer
+deep.equals(a, b) // true
+
+a = new Buffer
+b = new Buffer
+deep.equals(a, b) // false
+
+a = [1, 2, {x: 3, y: 4}]
+b = [1, 2, {x: 3, y: 4}]
+deep.equals(a, b) //true
+
+a = {x: 1, y: [2, 3], z: {a: 4, b: 5}}
+b = {z: {a: 4, b: 5}, y: [2, 3], x: 1}
+deep.equals(a, b) // true
+```
+
+Recursively compares nested arrays and plain objects, and returns true if the objects are structurally identical. Comparison is made with the strict identity operator (`===`). Variables containing references to *non-plain* objects are only considered equal is the references themselves are the same, regardless of the internal structure of the objects.
+
+Since JavaScript objects do not have a defined order for their keys, plain objects whose keys were defined in different order but are otherwise identical are considered equal.
+
+----
+
 ### extend(destination, source, ...)
 
 ```js

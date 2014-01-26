@@ -86,6 +86,118 @@ describe 'deep module', () ->
       assert.equal @clone.arr[4].foobar, @original.arr[4].foobar
       done()
 
+  describe 'equals()', () ->
+
+    it 'should return true for scalar data that are identical', ->
+      a = 1
+      b = 1
+      assert deep.equals(a, b)
+
+      a = "Hello"
+      b = "Hello"
+      assert deep.equals(a, b)
+
+      a = false
+      b = false
+      assert deep.equals(a, b)
+
+    it 'should return false for scalar data that are different', ->
+      a = 1
+      b = 2
+      assert !deep.equals(a, b)
+
+      a = "Hello"
+      b = "Goodbye"
+      assert !deep.equals(a, b)
+
+      a = false
+      b = true
+      assert !deep.equals(a, b)
+
+    it 'should return true for matching references to non-plain objects', ->
+      klass = (@v) ->
+      a = b = new klass("Hello")
+      assert deep.equals(a, b)
+
+    it 'should return false for non-matching references to similar non-plain objects', ->
+      klass = (@v) ->
+      a = new klass("Hello")
+      b = new klass("Hello")
+      assert !deep.equals(a, b)
+
+    it 'should return true for simple plain objects that are identical', ->
+      a = x: 1, y: 2
+      b = x: 1, y: 2
+      assert deep.equals(a, b)
+
+    it 'should return true for simple plain objects that are identical except for order', ->
+      a = x: 1; a.y = 2
+      b = y: 2; b.x = 1
+      assert deep.equals(a, b)
+
+    it 'should return false for simple plain objects that differ', ->
+      a = x: 1, y: 2
+      b = x: 1, y: 3
+      assert !deep.equals(a, b)
+
+    it 'should return true for arrays that are identical', ->
+      a = [1, 2, 3, 4]
+      b = [1, 2, 3, 4]
+      assert deep.equals(a, b)
+
+    it 'should return false for arrays that are identical except for order', ->
+      a = [1, 2, 3, 4]
+      b = [1, 2, 4, 3]
+      assert !deep.equals(a, b)
+
+    it 'should return false for arrays that differ in length', ->
+      a = [1, 2, 3, 4]
+      b = [1, 2, 3]
+      assert !deep.equals(a, b)
+
+    it 'should return false for arrays that differ in content', ->
+      a = [1, 2, 3, 4]
+      b = [5, 6, 7, 8]
+      assert !deep.equals(a, b)
+
+    it 'should return true for deeply nested content that is identical', ->
+      klass = (@v) ->
+      obj1 = new klass('Hello')
+      obj2 = new klass('Goodbye')
+
+      a = [
+        1
+        [false, null, undefined, obj1]
+        {x: 3, y: 4, z: [5, 6, obj2, 'some string']}
+      ]
+
+      b = [
+        1
+        [false, null, undefined, obj1]
+        {x: 3, y: 4, z: [5, 6, obj2, 'some string']}
+      ]
+
+      assert deep.equals(a, b)
+
+    it 'should return false for deeply nested content that differs slightly', ->
+      klass = (@v) ->
+      obj1 = new klass('Hello')
+      obj2 = new klass('Goodbye')
+
+      a = [
+        1
+        [false, null, undefined, obj1]
+        {x: 3, y: 4, z: [5, 6, obj2, 'some string']}
+      ]
+
+      b = [
+        1
+        [false, null, undefined, obj1]
+        {x: 3, y: 4, z: [5, 6, obj2, 'some string that is different']}
+      ]
+
+      assert !deep.equals(a, b)
+
   describe 'extend()', () ->
 
     it 'should accept multiple sources', (done) ->

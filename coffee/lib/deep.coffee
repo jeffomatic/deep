@@ -1,5 +1,5 @@
 _ = require('underscore')
-
+{puts} = require('util')
 deep =
 
   # Returns true for object literals and objects created with `new Object`.
@@ -20,6 +20,23 @@ deep =
       clone
     else
       obj
+
+  equals: (a, b) ->
+    if a == b
+      true
+    else if _.isArray(a)
+      return false unless _.isArray(b) && a.length == b.length
+      for i in [0...a.length]
+        return false unless deep.equals(a[i], b[i])
+      true
+    else if deep.isPlainObject(a)
+      size_a = _.size(a)
+      return false unless deep.isPlainObject(b) && size_a == _.size(b)
+      for k of a
+        return false unless deep.equals(a[k], b[k])
+      true
+    else
+      false
 
   extend: (destination, sources...) ->
     for source in sources
