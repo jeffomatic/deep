@@ -11,6 +11,9 @@
   "bugs": {
     "url" : "http://github.com/jeffomatic/deep/issues"
   },
+  "scripts": {
+    "test": "make js && make test && make test-js"
+  },
   "licenses": [
     {
       "type" : "MIT",
